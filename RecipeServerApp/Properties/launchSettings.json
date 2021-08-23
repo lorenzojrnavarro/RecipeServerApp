@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "RecipeServerApp": {
+      "commandName": "Project",
+      "sqlDebugging": true
+    }
+  }
+}
