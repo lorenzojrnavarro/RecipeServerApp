@@ -8,7 +8,9 @@ namespace RecipeServerApp
 {
     interface IRecipeController
     {
-        string GetRecipes(string recipeName);
+        string GetRecipes(string recipeName, string allergenIds);
+        string GetRandomRecipe();
+        string GetUserFavoriteRecipes(string ids);
         string GetRecipeByID(string id);
         void AddNewRecipe(string recipeName, string recipeURL, string recipeIngredients, string recipeAllergens, string recipeProcedure, string recipeCalories);
     }

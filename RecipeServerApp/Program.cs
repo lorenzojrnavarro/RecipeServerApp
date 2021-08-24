@@ -16,7 +16,11 @@ namespace RecipeServerApp
             Program program = new Program();
             requestHandler = new RequestHandler();
 
-            await program.Listen("http://localhost:4444/", 100);            
+            /*
+             * in cmd prompt as admin
+             * netsh http add urlacl url=http://+:25565/ user=Everyone
+             */
+            await program.Listen("http://+:25565/", 100);
         }
 
         public async Task Listen(string prefix, int maxConcurrentRequests)
@@ -29,6 +33,7 @@ namespace RecipeServerApp
             var requests = new HashSet<Task>();
             for (int i = 0; i < maxConcurrentRequests; i++)
                 requests.Add(listener.GetContextAsync());
+
 
             while (true)
             {

@@ -21,8 +21,10 @@ namespace RecipeServerApp
             recipeController = new DatabaseRecipeController();
 
             routeMap.Add("recipe", HandleRecipeIDLookup);
+            routeMap.Add("recipeRandom", HandleRandomRecipe);
             routeMap.Add("recipeSearch", HandleRecipeSearch);
-            routeMap.Add("recipeUpload", HandleRecipeUpload);
+            routeMap.Add("recipeUpload", HandleRecipeUpload);            
+            routeMap.Add("userFavorites", HandleUserFavoriteRecipeLookup);
         }
 
         public string HandleRequest(HttpListenerRequest request)
@@ -44,9 +46,19 @@ namespace RecipeServerApp
             return recipeController.GetRecipeByID(param["recipeID"]);
         }
 
+        private string HandleRandomRecipe(Dictionary<string, string> param)
+        {
+            return recipeController.GetRandomRecipe();
+        }
+
+        private string HandleUserFavoriteRecipeLookup(Dictionary<string, string> param)
+        {
+            return recipeController.GetUserFavoriteRecipes(param["userFavorites"]);
+        }
+
         private string HandleRecipeSearch(Dictionary<string, string> param)
         {
-            return recipeController.GetRecipes(param["recipeName"]);
+            return recipeController.GetRecipes(param["recipeName"], param["recipeAllergens"]);
         }
 
         private string HandleRecipeUpload(Dictionary<string, string> param)

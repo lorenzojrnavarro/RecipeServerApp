@@ -26,9 +26,19 @@ namespace RecipeServerApp
             stream.Close();
         }
 
-        public string GetRecipes(string recipeName)
+        public string GetRecipes(string recipeName, string allergenIds)
         {
             return JsonConvert.SerializeObject(recipes);
+        }
+
+        public string GetUserFavoriteRecipes(string ids)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetRandomRecipe()
+        {
+            throw new NotImplementedException();
         }
 
         public string GetRecipeByID(string id)

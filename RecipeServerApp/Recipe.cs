@@ -26,5 +26,8 @@ namespace RecipeServerApp
 
         [JsonProperty]
         public string Instructions { get; private set; }
+
+        [JsonProperty]
+        public string AllergenTags { get; private set; }
     }
 }
