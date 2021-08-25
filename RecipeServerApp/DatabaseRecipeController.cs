@@ -17,7 +17,7 @@ namespace RecipeServerApp
 
         public DatabaseRecipeController()
         {
-            
+
         }
 
         public string GetRecipes(string recipeName, string allergenIds)
@@ -30,11 +30,11 @@ namespace RecipeServerApp
                 list = connection.Query<Recipe>("dbo.SelectRecipeByFilter @RecipeName", new { RecipeName = recipeName }).ToList();
             }
 
-            List<string> splitAllergenIds = allergenIds.Split(',').ToList();
+            List<string> splitAllergenIds = allergenIds.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList();
 
             for (int i = 0; i < list.Count; i++)
             {
-                string[] recipeAllergens = list[i].AllergenTags.Split(',');
+                string[] recipeAllergens = list[i].AllergenTags.Split(',', StringSplitOptions.RemoveEmptyEntries);
                 bool containsAllergen = false;
 
                 for (int j = 0; j < recipeAllergens.Length; j++)
@@ -49,13 +49,14 @@ namespace RecipeServerApp
                 if (!containsAllergen) filteredList.Add(list[i]);
             }
 
-            return JsonConvert.SerializeObject(filteredList);
+
+            return JsonConvert.SerializeObject(filteredList);            
         }
 
         public string GetUserFavoriteRecipes(string ids)
         {
             List<Recipe> list;
-            int[] idList = JsonConvert.DeserializeObject<int[]>(ids);            
+            int[] idList = JsonConvert.DeserializeObject<int[]>(ids);
 
             Dictionary<string, object> dict = new Dictionary<string, object>()
             {
@@ -97,7 +98,7 @@ namespace RecipeServerApp
         }
 
         public void AddNewRecipe(string recipeName, string recipeURL, string recipeIngredients, string recipeAllergens, string recipeProcedure, string recipeCalories)
-        { 
+        {
             Dictionary<string, object> dict = new Dictionary<string, object>()
             {
                 { "@RecipeName", recipeName },
