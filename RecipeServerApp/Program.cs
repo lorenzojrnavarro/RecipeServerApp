@@ -5,7 +5,7 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RecipeServerApp
+namespace ServerApp
 {
     class Program
     {        
@@ -13,6 +13,7 @@ namespace RecipeServerApp
 
         static async Task Main(string[] args)
         {
+            NonBlockingConsole.Init();
             Program program = new Program();
             requestHandler = new RequestHandler();
 

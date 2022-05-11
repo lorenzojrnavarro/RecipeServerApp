@@ -7,68 +7,39 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RecipeServerApp
+namespace ServerApp
 {
     public class RequestHandler
     {
         delegate string FunctionHandler(Dictionary<string, string> param);
         private readonly Dictionary<string, FunctionHandler> routeMap;
-        private IRecipeController recipeController;
-        
+        private IBookController bookController;
+
         public RequestHandler()
         {
             routeMap = new Dictionary<string, FunctionHandler>();
-            recipeController = new DatabaseRecipeController();
+            bookController = new APIBookController();
 
-            routeMap.Add("recipe", HandleRecipeIDLookup);
-            routeMap.Add("recipeRandom", HandleRandomRecipe);
-            routeMap.Add("recipeSearch", HandleRecipeSearch);
-            routeMap.Add("recipeUpload", HandleRecipeUpload);            
-            routeMap.Add("userFavorites", HandleUserFavoriteRecipeLookup);
+            routeMap.Add("GetBookDetail", HandleBookDetailSearch);
         }
 
         public string HandleRequest(HttpListenerRequest request)
         {
-            string route = request.RawUrl.Substring(2);
+            string route = request.RawUrl.Substring(1);
             string text = new StreamReader(request.InputStream).ReadToEnd();
 
-            //var dict = text.Split(new[] {'&'}, StringSplitOptions.RemoveEmptyEntries)
-            //   .Select(part => part.Split('='))
-            //   .ToDictionary(split => split[0], split => split[1]);
-
             Dictionary<string, string> dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(text);
+
+            if (text == string.Empty)
+                return string.Empty;
 
             return routeMap[route].Invoke(dict);
         }
 
-        private string HandleRecipeIDLookup(Dictionary<string, string> param)
+        private string HandleBookDetailSearch(Dictionary<string, string> param)
         {
-            return recipeController.GetRecipeByID(param["recipeID"]);
+            NonBlockingConsole.WriteLine("Searching for book with value: " + param["searchValue"]);
+            return JsonConvert.SerializeObject(bookController.SearchBook(param["searchValue"]));
         }
-
-        private string HandleRandomRecipe(Dictionary<string, string> param)
-        {
-            return recipeController.GetRandomRecipe();
-        }
-
-        private string HandleUserFavoriteRecipeLookup(Dictionary<string, string> param)
-        {
-            return recipeController.GetUserFavoriteRecipes(param["userFavorites"]);
-        }
-
-        private string HandleRecipeSearch(Dictionary<string, string> param)
-        {
-            return recipeController.GetRecipes(param["recipeName"], param["recipeAllergens"]);
-        }
-
-        private string HandleRecipeUpload(Dictionary<string, string> param)
-        {   
-            string recipeImageName = Guid.NewGuid().ToString() + param["recipeName"] + ".png";
-            AmazonUploader.SendMyFileToS3(param["recipeImageBytes"], "morgothscookbookbucket", recipeImageName);
-
-            string imagePath = AmazonUploader.bucketPath + recipeImageName;
-            recipeController.AddNewRecipe(param["recipeName"], imagePath, param["recipeIngredients"], param["recipeAllergens"], param["recipeProcedure"], param["recipeCalories"]);
-            return string.Empty;
-        }
-    }    
+    }
 }
