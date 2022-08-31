@@ -13,7 +13,7 @@ namespace RecipeServerApp
     class DatabaseRecipeController : IRecipeController
     {
         //private readonly string connectionString = @"Data Source=192.168.4.42;Initial Catalog=MORGOTHS_COOKBOOK.MDF;User ID=RecipeAppServer;Password=moe380";
-        private readonly string connectionString = @"Data Source=76.175.108.117;Initial Catalog=MORGOTHS_COOKBOOK.MDF;User ID=RecipeAppServer;Password=moe380";
+        private readonly string connectionString = @"Data Source=PUBLIC_IP;Initial Catalog=MORGOTHS_COOKBOOK.MDF;User ID=RecipeAppServer;Password=moe380";
 
         public DatabaseRecipeController()
         {
