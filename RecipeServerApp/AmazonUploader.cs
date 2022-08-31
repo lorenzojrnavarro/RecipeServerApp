@@ -24,7 +24,7 @@ public static class AmazonUploader
         // a subdirectory with this name
         // fileNameInS3 = the file name in the S3
 
-        IAmazonS3 client = new AmazonS3Client("AKIAUTMAXTBVIIK7I36I", "e5jkEUrK2wzRK5t0Rtu9MUuxTyNFIOyiVwy9H8Pm",  RegionEndpoint.USWest1);        
+        IAmazonS3 client = new AmazonS3Client("key", "secret_key",  RegionEndpoint.USWest1);        
 
         // create a TransferUtility instance passing it the IAmazonS3 created in the first step
         TransferUtility utility = new TransferUtility(client);
